@@ -1,1 +1,0 @@
-ADO.Lite is a Micro-ORM
