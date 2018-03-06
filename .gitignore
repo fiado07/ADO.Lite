@@ -210,3 +210,15 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+
+ADO\.Lite\.Example/bin/Debug/
+
+*.exe
+
+*.dll
+
+ADO\.Lite\.Tests/obj/Release/
+
+*.cache
+
+*.txt
