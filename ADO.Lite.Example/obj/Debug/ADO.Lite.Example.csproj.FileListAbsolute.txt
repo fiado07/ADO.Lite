@@ -1,0 +1,8 @@
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite.Example\bin\Debug\ADO.Lite.Example.exe.config
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite.Example\bin\Debug\ADO.Lite.Example.exe
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite.Example\bin\Debug\ADO.Lite.Example.pdb
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite.Example\bin\Debug\ADO.Lite.dll
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite.Example\bin\Debug\ADO.Lite.pdb
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite.Example\obj\Debug\ADO.Lite.Example.csprojResolveAssemblyReference.cache
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite.Example\obj\Debug\ADO.Lite.Example.exe
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite.Example\obj\Debug\ADO.Lite.Example.pdb
