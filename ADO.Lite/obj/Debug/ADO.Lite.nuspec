@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>ADO.Lite</id>
+    <version>1.0.0</version>
+    <title>ADO.Lite</title>
+    <authors>x120801</authors>
+    <owners>x120801</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>ADO.Lite</description>
+    <summary>ADO.Lite</summary>
+    <copyright>Copyright © x120801</copyright>
+    <tags>ADO.Lite</tags>
+  </metadata>
+  <files>
+    <file src="C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ORM.lite.ADO\bin\Debug\ADO.Lite.dll" target="lib\net46\ADO.Lite.dll" exclude="" />
+    <file src="C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ORM.lite.ADO\bin\Debug\ADO.Lite.pdb" target="lib\net46\ADO.Lite.pdb" exclude="" />
+    <file src="C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite\Readme.txt" target="Readme.txt" exclude="" />
+  </files>
+</package>

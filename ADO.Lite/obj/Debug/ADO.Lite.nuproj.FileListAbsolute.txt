@@ -1,0 +1,5 @@
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite\bin\Debug\ADO.Lite.1.0.0.nupkg
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite\bin\Debug\ADO.Lite.1.0.0.symbols.nupkg
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite\obj\Debug\ADO.Lite.nuspec
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite\obj\Debug\ADO.Lite.1.0.0.nupkg
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite\obj\Debug\ADO.Lite.1.0.0.symbols.nupkg

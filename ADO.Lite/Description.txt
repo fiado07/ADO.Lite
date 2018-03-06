@@ -1,0 +1,2 @@
+This is Micro-ORM that supports basicaly Sql Server, MySql and DB2 data bases.
+it gives the user a simple way to connect through DB in lite maner.

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>ADO.Lite</id>
+    <version>1.0.0</version>
+    <title>ADO.Lite</title>
+    <authors>Fiado Baloi</authors>
+    <owners>Fiado Baloi</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>This is Micro-ORM that supports basicaly Sql Server, MySql and DB2 data bases.</description>
+    <summary>ADO.Lite is a Micro-ORM</summary>
+    <releaseNotes>This verson build upon .net 4.6</releaseNotes>
+    <copyright>Copyright © Fiado Baloi</copyright>
+    <tags>orm sql micro-orm</tags>
+  </metadata>
+  <files>
+    <file src="C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ORM.lite.ADO\bin\Release\ADO.Lite.dll" target="lib\net46\ADO.Lite.dll" exclude="" />
+    <file src="C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ORM.lite.ADO\bin\Release\ADO.Lite.pdb" target="lib\net46\ADO.Lite.pdb" exclude="" />
+    <file src="C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite\Readme.txt" target="Readme.txt" exclude="" />
+  </files>
+</package>

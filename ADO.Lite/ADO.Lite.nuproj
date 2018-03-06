@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|AnyCPU">
+      <Configuration>Debug</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|AnyCPU">
+      <Configuration>Release</Configuration>
+      <Platform>AnyCPU</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>6d9540f4-c098-4ec6-9279-5b88411b4f2e</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup>
+    <NuProjPath Condition=" '$(NuProjPath)' == '' ">$(MSBuildExtensionsPath)\NuProj\</NuProjPath>
+  </PropertyGroup>
+  <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
+  <PropertyGroup Label="Configuration">
+    <Id>ADO.Lite</Id>
+    <Version>1.0.0</Version>
+    <Title>ADO.Lite</Title>
+    <Authors>Fiado Baloi</Authors>
+    <Owners>Fiado Baloi</Owners>
+    <Summary>ADO.Lite is a Micro-ORM</Summary>
+    <Description>This is Micro-ORM that supports basicaly Sql Server, MySql and DB2 data bases.</Description>
+    <ReleaseNotes>This verson build upon .net 4.6</ReleaseNotes>
+    <ProjectUrl>
+    </ProjectUrl>
+    <LicenseUrl>
+    </LicenseUrl>
+    <Copyright>Copyright © Fiado Baloi</Copyright>
+    <Tags>orm sql micro-orm</Tags>
+    <MinClientVersion>
+    </MinClientVersion>
+    <GenerateSymbolPackage>false</GenerateSymbolPackage>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="Readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ORM.lite.ADO\ADO.Lite.csproj" />
+  </ItemGroup>
+  <Import Project="$(NuProjPath)\NuProj.targets" />
+</Project>

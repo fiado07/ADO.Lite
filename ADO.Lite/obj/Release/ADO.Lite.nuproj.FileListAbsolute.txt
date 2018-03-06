@@ -1,0 +1,3 @@
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite\bin\Release\ADO.Lite.1.0.0.nupkg
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite\obj\Release\ADO.Lite.nuspec
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite\obj\Release\ADO.Lite.1.0.0.nupkg
