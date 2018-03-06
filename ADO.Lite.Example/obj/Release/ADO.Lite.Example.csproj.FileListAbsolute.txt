@@ -6,3 +6,11 @@ C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite.Exa
 C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite.Example\obj\Release\ADO.Lite.Example.csprojResolveAssemblyReference.cache
 C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite.Example\obj\Release\ADO.Lite.Example.exe
 C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite.Example\obj\Release\ADO.Lite.Example.pdb
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ADO.Lite\ADO.Lite.Example\bin\Release\ADO.Lite.Example.exe.config
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ADO.Lite\ADO.Lite.Example\bin\Release\ADO.Lite.Example.exe
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ADO.Lite\ADO.Lite.Example\bin\Release\ADO.Lite.Example.pdb
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ADO.Lite\ADO.Lite.Example\bin\Release\ADO.Lite.dll
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ADO.Lite\ADO.Lite.Example\bin\Release\ADO.Lite.pdb
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ADO.Lite\ADO.Lite.Example\obj\Release\ADO.Lite.Example.csprojResolveAssemblyReference.cache
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ADO.Lite\ADO.Lite.Example\obj\Release\ADO.Lite.Example.exe
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ADO.Lite\ADO.Lite.Example\obj\Release\ADO.Lite.Example.pdb

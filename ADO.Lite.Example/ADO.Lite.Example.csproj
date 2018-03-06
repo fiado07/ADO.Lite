@@ -53,7 +53,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ORM.lite.ADO\ADO.Lite.csproj">
+    <ProjectReference Include="..\ADO.Lite\ADO.Lite.csproj">
       <Project>{bec4af8b-f276-4735-b8cb-3bd019b3f94a}</Project>
       <Name>ADO.Lite</Name>
     </ProjectReference>
