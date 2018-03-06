@@ -1,0 +1,9 @@
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite.Tests\bin\Debug\ADO.Lite.Tests.dll
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite.Tests\bin\Debug\ADO.Lite.Tests.pdb
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite.Tests\bin\Debug\ADO.Lite.dll
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite.Tests\bin\Debug\nunit.framework.dll
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite.Tests\bin\Debug\ADO.Lite.pdb
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite.Tests\bin\Debug\nunit.framework.xml
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite.Tests\obj\Debug\ADO.Lite.Tests.csprojResolveAssemblyReference.cache
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite.Tests\obj\Debug\ADO.Lite.Tests.dll
+C:\Users\x120801\Documents\Visual Studio 2015\Projects\ORM.lite.ADO\ADO.Lite.Tests\obj\Debug\ADO.Lite.Tests.pdb
