@@ -17,6 +17,7 @@ namespace ADO.Lite.Tests.TestCases
             // initialize base connecton
             BuildQuery.DbConnection = new SqlServerContext();
 
+
         }
 
         [Test]
@@ -49,12 +50,12 @@ namespace ADO.Lite.Tests.TestCases
 
 
             // act
-            totalBefor = BuildQuery.Count(DbProvider.SqlClient, "aluno");
+            totalBefor = BuildQuery.Count( "aluno");
 
             // Insert query execution
             BuildQuery.ExecuteSql(sql);
 
-            totalAfter = BuildQuery.Count(DbProvider.SqlClient, "aluno");
+            totalAfter = BuildQuery.Count("aluno");
 
 
             // assert 
@@ -75,12 +76,12 @@ namespace ADO.Lite.Tests.TestCases
 
 
             // act
-            totalBefor = BuildQuery.Count(DbProvider.SqlClient, "aluno");
+            totalBefor = BuildQuery.Count("aluno");
 
             // Insert query execution
             BuildQuery.Insert(aluno, new List<string> { nameof(aluno.alunoID), nameof(aluno.data) });
 
-            totalAfter = BuildQuery.Count(DbProvider.SqlClient, "aluno");
+            totalAfter = BuildQuery.Count("aluno");
 
 
             // assert 
@@ -132,12 +133,12 @@ namespace ADO.Lite.Tests.TestCases
 
 
             // act
-            totalBefor = BuildQuery.Count(DbProvider.SqlClient, "aluno");
+            totalBefor = BuildQuery.Count("aluno");
 
             // Insert query execution
             BuildQuery.Delete<Aluno>(x => x.curso == "20" && x.Nome == "Fia");
 
-            totalAfter = BuildQuery.Count(DbProvider.SqlClient, "aluno");
+            totalAfter = BuildQuery.Count("aluno");
 
 
             // assert 

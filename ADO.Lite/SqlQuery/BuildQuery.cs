@@ -83,7 +83,7 @@ namespace ADO.Lite.SqlQuery
         }
 
 
-        public static int Count(this DbProvider dbProvider, string nomeTabela = "")
+        public static int Count(string nomeTabela = "")
         {
 
             int _result = 0;

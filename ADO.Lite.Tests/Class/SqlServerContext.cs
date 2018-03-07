@@ -12,7 +12,7 @@ namespace ADO.Lite.Tests.Class
     public class SqlServerContext : Contracts.IDbConnectionSql
     {
 
-        private string SqlConnectionString = @"Persist Security Info=False;Integrated Security=true;Initial Catalog=escola;server=WEMZ1BGID1\SQLEXPRESS";
+        private string SqlConnectionString = @"Persist Security Info=False;Integrated Security=true;Initial Catalog=;server=";
 
         public bool canClose { get; set; }
 
