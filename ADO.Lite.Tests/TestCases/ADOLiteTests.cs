@@ -1,14 +1,9 @@
-﻿using ADO.Lite.Contracts;
-using ADO.Lite.Enums;
+﻿using ADO.Lite.Enums;
 using ADO.Lite.SqlQuery;
 using ADO.Lite.Tests.Class;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ADO.Lite.Tests.TestCases
 {
