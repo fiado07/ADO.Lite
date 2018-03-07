@@ -14,6 +14,7 @@ namespace ADO.Lite.Parameters
     public class SqlParameter
     {
         public string Sql { get; set; }
+        
         public string Predicate { get; set; }
         public List<Common.KeyValue> Parameter { get; set; }
 
