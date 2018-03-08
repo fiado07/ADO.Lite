@@ -82,18 +82,16 @@ public class SqlServerContext : Contracts.<span style="color:red">IDbConnectionS
 # 
 This is strongly typed function that takes lambda expression predicate as argument to build select query. 
 
-<pre>
- <code >
+```
  result = <span style="color:green;">BuildQuery</span>.CheckAny<<span style="color:green;">Aluno</span>>((x) => x.nota ==  <span style="color:brown;">"10"</span> && x.alunoID == 5);
- </code>
-</pre>
+```
 </br>
 ### Execute query with no return ###
 # 
 This function only execute a plane query to database. 
 
 <pre>
- <code >
+ <code  >
   <span style="color:green;">BuildQuery</span>.ExecuteSql(sql);
  </code>
 </pre>
