@@ -65,6 +65,7 @@ public class SqlServerContext : Contracts.<span style="color:red">IDbConnectionS
 </br>
 ### Connect to database ###
 # 
+
  We only need to initialize the context class to associate it to database provider on Domain Class.
 
 <pre>
