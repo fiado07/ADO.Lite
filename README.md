@@ -188,4 +188,4 @@ This library olds transactions too, just need to set it on initialization in thi
 
 ### Requirements ###
 # 
-**ADO.Lite** requires .NET framework 4.6 
+**ADO.Lite** requires .NET framework 4.6 +
