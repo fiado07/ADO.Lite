@@ -3,7 +3,10 @@
 # ADO.Lite - Is a lite ORM for .Net #
 </br>
 
-`[style underline <u>[b\]</u>]`
+<pre><code>
+<font color="red" ># Ignore the fact this is Perl, and pretend it's some unheard-of language</font>
+<span class="code-keyword">our</span> <span class="code-variable">$site</span> = <span class="code-string">"needs this"</span>;
+</code></pre>
 The **ADO.Lite** is a powerfull ORM lite for .Net apps that provides an intuitive and flexible way to work with relational databases, with intelicense privided on arguments as lambda expression delegates.
  
 </br>
