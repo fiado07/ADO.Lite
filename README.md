@@ -157,7 +157,7 @@ aluno = BuildQuery.GetObjectList<Aluno>(x => x.nota == "10");
 
 ### Notes ###
 
-This library olds transactions too, just need to set it on initialization in this property:
+This library holds transactions too, just need to set it on initialization in this property:
 
 ```csharp
 BuildQuery.DbConnection.DbConnectionBase.BeginTransaction
