@@ -1,13 +1,10 @@
 
 
 # ADO.Lite - Is a lite ORM for .Net #
-</br>
-
 
 The **ADO.Lite** is a powerfull ORM lite for .Net apps that provides an intuitive and flexible way to work with relational databases, with intelicense privided on arguments as lambda expression delegates.
- 
-</br>
-</br>
+
+
 
 ### Database supported ###
 
@@ -24,167 +21,150 @@ The Context class must implement this abstraction:
 
 ```cs
 Contracts.IDbConnectionSql 
-``` 
-<pre>
-<code>
+```
 
-public class SqlServerContext : Contracts.<span style="color:red">IDbConnectionSql</span>
+
+```csharp
+  public class SqlServerContext : Contracts.IDbConnectionSql
     {
 
-        <span style="color:blue">private string</span> SqlConnectionString = @"Persist Security Info=False;Integrated Security=true;Initial Catalog=;server=";
+        private string SqlConnectionString = @"Persist Security Info=False;Integrated Security=true;Initial Catalog=;server=";
 
-        <span style="color:blue;">public bool</span> canClose { <span style="color:blue;">get</span>; <span style="color:blue;">set</span>; }
+        public bool canClose { get; set; }
 
-        <span style="color:blue;">public</span> <span style="color:#cccc00;">IEnumerable<string></span> columnsToFilter { <span style="color:blue;">get</span>; <span style="color:blue;">set</span>; }
+        public IEnumerable<string> columnsToFilter { get; set; }
 
-         <span style="color:blue;">public</span> <span style="color:#cccc00;">IDbConnection<string></span>  DbConnectionBase { <span style="color:blue;">get</span>; <span style="color:blue;">set</span>; }
+        public IDbConnection DbConnectionBase { get; set; }
 
-         <span style="color:blue;">public</span> <span style="color:#cccc00;">DbProvider</span>  DbProvider { <span style="color:blue;">get</span>; <span style="color:blue;">set</span>; }
+        public DbProvider DbProvider { get; set; }
 
-         <span style="color:blue;">public</span> <span style="color:#cccc00;">IDbDataAdapter<string></span>  SetAdapter { <span style="color:blue;">get</span>; <span style="color:blue;">set</span>; }
+        public IDbDataAdapter SetAdapter { get; set; }
 
         public SqlServerContext()
         {
 
-            DbConnectionBase = <span style="color:blue;">new</span>  <span style="color:green;">SqlConnection</span> (SqlConnectionString);
+            DbConnectionBase = new SqlConnection(SqlConnectionString);
 
-            DbProvider = <span style="color:#cccc00;">DbProvider</span> .SqlClient;
+            DbProvider = DbProvider.SqlClient;
 
-            SetAdapter =  <span style="color:blue;">new</span>  <span style="color:green;">SqlDataAdapter</span>();
+            SetAdapter = new SqlDataAdapter();
+
         }
 
     }
-
-
-</code>
-
-</pre>
+```
 
 
 
-</br>
 ### Connect to database ###
-# 
-
  We only need to initialize the context class to associate it to database provider on Domain Class.
 
-<pre>
- <code>
-  <span style="color:blue;">public</span> ADOLiteTests()
-   {   
-    // initialize base connecton
-    <span style="color:green;">BuildQuery</span>.DbConnection =<span style="color:blue;">new</span><span style="color:green">SqlServerContext</span>();
-   }
- </code>
-</pre>
-</br>
+```c#
+public ADOLiteTests()
+{
+// initialize base connecton
+ BuildQuery.DbConnection = new SqlServerContext();
+}
+```
+
+
 
 ### Check data on database ###
-# 
+
 This is strongly typed function that takes lambda expression predicate as argument to build select query. 
 
+```c#
+   result = BuildQuery.CheckAny<Aluno>((x) => x.nota == "10" && x.alunoID == 5);
 ```
- result = <span style="color:green;">BuildQuery</span>.CheckAny<<span style="color:green;">Aluno</span>>((x) => x.nota ==  <span style="color:brown;">"10"</span> && x.alunoID == 5);
-```
-</br>
+
+
 ### Execute query with no return ###
-# 
+
 This function only execute a plane query to database. 
 
-<pre>
- <code  >
-  <span style="color:green;">BuildQuery</span>.ExecuteSql(sql);
- </code>
-</pre>
-</br>
+```csharp
+BuildQuery.ExecuteSql(sql);
+```
+
+
 
 ### Insert data to database ###
-# 
+
 This function builds **INSERT** query by object and can exclude some properties if needed.
 
-<pre>
- <code >
-  <span style="color:green;"> Aluno</span> aluno = new  <span style="color:green;">Aluno</span> { curso = "20", Nome = "Fia" };  
-  // Insert query execution
-  <span style="color:green;">BuildQuery</span>.Insert(aluno, new <span style="color:green;">List</span><<span style="color:blue;">string</span>> { <span style="color:blue;">nameof</span>>(aluno.alunoID), nameof(aluno.data) });
- </code>
-</pre>
-</br>
+```csharp
+Aluno aluno = new Aluno { curso = "20", Nome = "Fia" };
+ 
+// Insert query execution
+ BuildQuery.Insert(aluno, new List<string> { nameof(aluno.alunoID), nameof(aluno.data) });
+```
+
+
 
 ### UPDATE data on database ###
-# 
+
 This function builds **UPDATE** query by object and can exclude some properties if needed.
 
-<pre>
- <code >
- <span style="color:green;">Aluno</span> alunoToUpdate =<span style="color:blue;">new</span>  <span style="color:green;">Aluno</span> { curso = "20", Nome = "Fiado" };
+```csharp
+Aluno alunoToUpdate = new Aluno { curso = "20", Nome = "Fiado" };
 
 // Insert query execution
-<span style="color:green;">BuildQuery</span>.Update(alunoToUpdate, x => x.alunoID == 5, excludeColumns: new List<string> { nameof(alunoUpdated.data) });
- </code>
-</pre>
-</br>
+BuildQuery.Update(alunoToUpdate, x => x.alunoID == 5, excludeColumns: new List<string> { nameof(alunoUpdated.data) });
+
+```
+
+
 
 ### DELETE data on database ###
-# 
 This is strongly typed function that builds **DELETE** query by object and takes lambda expression as argument to give the user the power of intelicense into his hands.
 
-<pre>
- <code >
-// delete
-   <span style="color:green;">BuildQuery</span>.Delete<Aluno>(x => x.curso == "20" && x.Nome == "Fia");
- </code>
-</pre>
-</br>
+```csharp
+// query execution
+BuildQuery.Delete<Aluno>(x => x.curso == "20" && x.Nome == "Fia");
+```
+
+
 
 ### GET DataTable Result from database ###
-# 
+
 This is strongly typed function that builds **SELECT** query by object and takes lambda expression as argument to give the user the power of intelicense into his hands.
 
-<pre>
- <code >
-// get
-    DataTable = <span style="color:green;">BuildQuery</span>.GetTable<<span style="color:blue;">Aluno</span>>(x => x.nota == "10");
- </code>
-</pre>
-</br>
+```csharp
+table = BuildQuery.GetTable<Aluno>(x => x.nota == "10");
+```
+
+
 
 ### GET Single Object from database ###
-# 
+
 This is strongly typed function that builds **SELECT** query by object and takes lambda expression as argument to give the user the power of intelicense into his hands.
 
-<pre>
- <code >
-// select
-  aluno = <span style="color:green;">BuildQuery</span>.GetObject<<span style="color:blue;">Aluno</span>>(x => x.alunoID == 4);
- </code>
-</pre>
-</br>
+```csharp
+aluno = BuildQuery.GetObject<Aluno>(x => x.alunoID == 4);
+```
+
+
 
 ### GET Object List from database ###
-# 
+
 This is strongly typed function that builds **SELECT** query by object and takes lambda expression as argument to give the user the power of intelicense into his hands.
 
-<pre>
- <code >
-// select
-   aluno = <span style="color:green;">BuildQuery</span>.GetObjectList<<span style="color:blue;">Aluno</span>>(x => x.nota == "10");
- </code>
-</pre>
-</br>
+```csharp
+aluno = BuildQuery.GetObjectList<Aluno>(x => x.nota == "10");
+```
+
+
 
 ### Notes ###
-# 
+
 This library olds transactions too, just need to set it on initialization in this property:
 
-<pre>
- <code >
- <span style="color:green;">BuildQuery</span>.DbConnection.DbConnectionBase.BeginTransaction
- </code>
-</pre>
-</br>
+```csharp
+BuildQuery.DbConnection.DbConnectionBase.BeginTransaction
+```
+
+
 
 
 ### Requirements ###
-# 
 **ADO.Lite** requires .NET framework 4.6 +
