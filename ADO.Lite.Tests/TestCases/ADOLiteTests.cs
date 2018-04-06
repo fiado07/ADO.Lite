@@ -74,7 +74,7 @@ namespace ADO.Lite.Tests.TestCases
 
             Aluno aluno = new Aluno { curso = "20", Nome = "Fia" };
 
-
+        
             // act
             totalBefor = BuildQuery.Count("aluno");
 
@@ -135,7 +135,7 @@ namespace ADO.Lite.Tests.TestCases
             // act
             totalBefor = BuildQuery.Count("aluno");
 
-            // Insert query execution
+            // query execution
             BuildQuery.Delete<Aluno>(x => x.curso == "20" && x.Nome == "Fia");
 
             totalAfter = BuildQuery.Count("aluno");

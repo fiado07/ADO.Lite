@@ -167,4 +167,4 @@ BuildQuery.DbConnection.DbConnectionBase.BeginTransaction
 
 
 ### Requirements ###
-**ADO.Lite** requires .NET framework 4.6 +
+**ADO.Lite** requires .NET framework 4 +
