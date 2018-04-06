@@ -62,7 +62,7 @@ Contracts.IDbConnectionSql
 ```c#
 public ADOLiteTests()
 {
-// initialize base connecton
+// initialize base connection
  BuildQuery.DbConnection = new SqlServerContext();
 }
 ```
