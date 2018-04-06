@@ -19,15 +19,14 @@
   <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
   <PropertyGroup Label="Configuration">
     <Id>ADO.Lite</Id>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <Title>ADO.Lite</Title>
     <Authors>Fiado Baloi</Authors>
     <Owners>Fiado Baloi</Owners>
     <Summary>ADO.Lite is a Micro-ORM</Summary>
     <Description>This is Micro-ORM that supports basicaly Sql Server, MySql and DB2 data bases.</Description>
-    <ReleaseNotes>This verson build upon .net 4.6</ReleaseNotes>
-    <ProjectUrl>
-    </ProjectUrl>
+    <ReleaseNotes>This verson build upon .net 4+</ReleaseNotes>
+    <ProjectUrl>https://github.com/fiado07/ADO.Lite</ProjectUrl>
     <LicenseUrl>
     </LicenseUrl>
     <Copyright>Copyright © Fiado Baloi</Copyright>
