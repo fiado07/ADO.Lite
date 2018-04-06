@@ -2,7 +2,7 @@
 
 # ADO.Lite - Is a lite ORM for .Net #
 
-The **ADO.Lite** is a powerfull ORM lite for .Net apps that provides an intuitive and flexible way to work with relational databases, with intelicense privided on arguments as lambda expression delegates.
+The **ADO.Lite** is a powerfull ORM lite for .Net apps that provides an intuitive and flexible way to work with relational databases, with intelicense provided on arguments as lambda expression delegates.
 
 
 
