@@ -18,11 +18,11 @@ namespace ADO.Lite.Example
         static void Main(string[] args)
         {
 
-         
+
             IDbConnectionSql sqlConnnection = new SqlServerContext();
             BuildQuery.DbConnection = sqlConnnection;
 
-                     
+
 
             // arrange
             string sql = string.Empty;
@@ -33,14 +33,14 @@ namespace ADO.Lite.Example
 
 
             // act
-            totalBefor = BuildQuery.Count(DbProvider.SqlClient, "aluno");
+            totalBefor = BuildQuery.Count("aluno");
 
             // Insert query execution
             BuildQuery.Insert(aluno, new List<string> { nameof(aluno.alunoID), nameof(aluno.data) });
 
-            totalAfter = BuildQuery.Count(DbProvider.SqlClient, "aluno");
+            totalAfter = BuildQuery.Count("aluno");
 
-            
+
             //Aluno aluno = new Aluno { alunoID = 4, nota = "10" };
 
             bool resultado = BuildQuery.CheckAny<Aluno>((x) => x.nota == "10" && x.alunoID == 4);
@@ -65,12 +65,12 @@ namespace ADO.Lite.Example
 
 
             // act
-            totalBefor = BuildQuery.Count(DbProvider.SqlClient, "aluno");
+            totalBefor = BuildQuery.Count( "aluno");
 
             // Insert query execution
             BuildQuery.Insert(aluno, new List<string> { nameof(aluno.data) });
 
-            totalAfter = BuildQuery.Count(DbProvider.SqlClient, "aluno");
+            totalAfter = BuildQuery.Count( "aluno");
 
 
             // assert 
