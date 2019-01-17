@@ -60,10 +60,16 @@ Contracts.IDbConnectionSql
  We only need to initialize the context class to associate it to database provider on Domain Class.
 
 ```c#
+
+ BuildQuery buildquery;
+
 public ADOLiteTests()
 {
-// initialize base connection
- BuildQuery.DbConnection = new SqlServerContext();
+
+IDbConnectionSql Db2Connnection = new Tests.Class.SqlServerContext();
+ // BuildQuery.DbConnection = Db2Connnection;
+ buildquery = BuildQuery.ContextBuilder(Db2Connnection);
+    
 }
 ```
 
@@ -74,7 +80,7 @@ public ADOLiteTests()
 This is strongly typed function that takes lambda expression predicate as argument to build select query. 
 
 ```c#
-   result = BuildQuery.CheckAny<Aluno>((x) => x.nota == "10" && x.alunoID == 5);
+   result = buildquery.any<Aluno>((x) => x.nota == "10" && x.alunoID == 5);
 ```
 
 
@@ -83,7 +89,7 @@ This is strongly typed function that takes lambda expression predicate as argume
 This function only execute a plane query to database. 
 
 ```csharp
-BuildQuery.ExecuteSql(sql);
+buildquery.ExecuteSql(sql);
 ```
 
 
@@ -96,7 +102,7 @@ This function builds **INSERT** query by object and can exclude some properties 
 Aluno aluno = new Aluno { curso = "20", Nome = "Fia" };
  
 // Insert query execution
- BuildQuery.Insert(aluno, new List<string> { nameof(aluno.alunoID), nameof(aluno.data) });
+ buildquery.Insert(aluno, new List<string> { nameof(aluno.alunoID), nameof(aluno.data) });
 ```
 
 
@@ -109,7 +115,7 @@ This function builds **UPDATE** query by object and can exclude some properties 
 Aluno alunoToUpdate = new Aluno { curso = "20", Nome = "Fiado" };
 
 // Insert query execution
-BuildQuery.Update(alunoToUpdate, x => x.alunoID == 5, excludeColumns: new List<string> { nameof(alunoUpdated.data) });
+buildquery.Update(alunoToUpdate, x => x.alunoID == 5, excludeColumns: new List<string> { nameof(alunoUpdated.data) });
 
 ```
 
@@ -120,7 +126,7 @@ This is strongly typed function that builds **DELETE** query by object and takes
 
 ```csharp
 // query execution
-BuildQuery.Delete<Aluno>(x => x.curso == "20" && x.Nome == "Fia");
+buildquery.Delete<Aluno>(x => x.curso == "20" && x.Nome == "Fia");
 ```
 
 
@@ -130,7 +136,7 @@ BuildQuery.Delete<Aluno>(x => x.curso == "20" && x.Nome == "Fia");
 This is strongly typed function that builds **SELECT** query by object and takes lambda expression as argument to give the user the power of intelicense into his hands.
 
 ```csharp
-table = BuildQuery.GetTable<Aluno>(x => x.nota == "10");
+table = buildquery.ExecuteSqlGetTabela(new Parameters.SqlAndParameters() { Sql = "Select * from aluno" });
 ```
 
 
@@ -140,7 +146,7 @@ table = BuildQuery.GetTable<Aluno>(x => x.nota == "10");
 This is strongly typed function that builds **SELECT** query by object and takes lambda expression as argument to give the user the power of intelicense into his hands.
 
 ```csharp
-aluno = BuildQuery.GetObject<Aluno>(x => x.alunoID == 4);
+aluno = buildquery.Get<Aluno>(x => x.alunoID == 4);
 ```
 
 
@@ -150,7 +156,7 @@ aluno = BuildQuery.GetObject<Aluno>(x => x.alunoID == 4);
 This is strongly typed function that builds **SELECT** query by object and takes lambda expression as argument to give the user the power of intelicense into his hands.
 
 ```csharp
-aluno = BuildQuery.GetObjectList<Aluno>(x => x.nota == "10");
+aluno = buildquery.GetList<Aluno>(x => x.nota == "10");
 ```
 
 
@@ -160,7 +166,7 @@ aluno = BuildQuery.GetObjectList<Aluno>(x => x.nota == "10");
 This library holds transactions too, just need to set it on initialization in this property:
 
 ```csharp
-BuildQuery.DbConnection.DbConnectionBase.BeginTransaction
+buildquery.DbConnection.DbConnectionBase.BeginTransaction
 ```
 
 
