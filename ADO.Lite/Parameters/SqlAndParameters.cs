@@ -11,15 +11,17 @@ namespace ADO.Lite.Parameters
     /// <summary>
     /// Holds sql and sqlParameters
     /// </summary>
-    public class SqlParameter
+    public class SqlAndParameters
     {
         public string Sql { get; set; }
-        
-        public string Predicate { get; set; }
-        public List<Common.KeyValue> Parameter { get; set; }
+
+        public bool isStoredProcedure { get; set; } = false;
+
+
+        public List<Common.Parameter> Parameter { get; set; }
 
       
-        public SqlParameter()
+        public SqlAndParameters()
         {
 
         }

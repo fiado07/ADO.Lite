@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class\Aluno.cs" />
+    <Compile Include="Class\DB2Context.cs" />
     <Compile Include="Class\SqlServerContext.cs" />
     <Compile Include="TestCases\ADOLiteTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

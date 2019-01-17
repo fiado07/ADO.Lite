@@ -1,4 +1,4 @@
-﻿using ADO.Lite.Enums;
+﻿using ADO.Lite.Contracts;
 using ADO.Lite.SqlQuery;
 using ADO.Lite.Tests.Class;
 using NUnit.Framework;
@@ -11,11 +11,15 @@ namespace ADO.Lite.Tests.TestCases
     public class ADOLiteTests
     {
 
+        BuildQuery buildquery;
+
         public ADOLiteTests()
         {
-            
-            // initialize base connecton
-            BuildQuery.DbConnection = new SqlServerContext();
+
+            IDbConnectionSql Db2Connnection = new Tests.Class.SqlServerContext();
+            // BuildQuery.DbConnection = Db2Connnection;
+
+            buildquery = BuildQuery.ContextBuilder(Db2Connnection);
 
 
         }
@@ -26,10 +30,11 @@ namespace ADO.Lite.Tests.TestCases
             //Arrange 
             bool result = false;
 
-                                  
-            result = BuildQuery.CheckAny<Aluno>((x) => x.nota == "10" && x.alunoID == 5);
+
+            //result = buildquery.any<Aluno>((x) => x.nota == "10" && x.alunoID == 5);
+
             // Act
-            result = BuildQuery.CheckAny<Aluno>((x) => x.nota == "10" && x.alunoID == 5);
+            result = buildquery.any<Aluno>((x) => x.nota == "10" && x.alunoID == 19);
 
 
             //Assert
@@ -45,21 +50,24 @@ namespace ADO.Lite.Tests.TestCases
 
             // arrange
             string sql = "Insert into aluno (nota,curso,data) values ('30','BBBB',getdate())";
-            int totalBefor = 0;
-            int totalAfter = 0;
+            int count = 0;
+            int countAfter = 0;
+            Parameters.SqlAndParameters sqlParameters = new Parameters.SqlAndParameters();
 
 
-            // act
-            totalBefor = BuildQuery.Count( "aluno");
+            sqlParameters.Sql = sql;
+
+            count = (int)buildquery.ExecuteSqlGetSingle(new Parameters.SqlAndParameters() { Sql = "Select count(*) total from aluno" });
+
 
             // Insert query execution
-            BuildQuery.ExecuteSql(sql);
+            buildquery.ExecuteSql(sqlParameters);
 
-            totalAfter = BuildQuery.Count("aluno");
 
+            countAfter = (int)buildquery.ExecuteSqlGetSingle(new Parameters.SqlAndParameters() { Sql = "Select count(*) total from aluno" });
 
             // assert 
-            Assert.Greater(totalAfter, totalBefor);
+            Assert.Greater(countAfter, count);
 
 
         }
@@ -69,24 +77,16 @@ namespace ADO.Lite.Tests.TestCases
 
             // arrange
             string sql = string.Empty;
-            int totalBefor = 0;
-            int totalAfter = 0;
 
-            Aluno aluno = new Aluno { curso = "20", Nome = "Fia" };
 
-        
-            // act
-            totalBefor = BuildQuery.Count("aluno");
+            Aluno aluno = new Aluno { curso = "20", Nome = "Fia", nota = "11" };
 
             // Insert query execution
-            BuildQuery.Insert(aluno, new List<string> { nameof(aluno.alunoID), nameof(aluno.data) });
-
-            totalAfter = BuildQuery.Count("aluno");
+            buildquery.Add(aluno, new List<string> { nameof(aluno.alunoID), nameof(aluno.data) });
 
 
             // assert 
-            Assert.Greater(totalAfter, totalBefor);
-
+            Assert.IsTrue(true);
 
         }
 
@@ -99,18 +99,13 @@ namespace ADO.Lite.Tests.TestCases
             Aluno alunoCurrent = new Aluno();
             Aluno alunoToUpdate = new Aluno { curso = "20", Nome = "Fiado" };
             Aluno alunoUpdated = new Aluno();
-
-
-            // act
-
-            alunoCurrent = BuildQuery.GetObject<Aluno>(x => x.alunoID == 5);
-
+            
 
             // Insert query execution
-            BuildQuery.Update(alunoToUpdate, x => x.alunoID == 5, excludeColumns: new List<string> { nameof(alunoUpdated.data) });
+            buildquery.Update(alunoToUpdate, x => x.alunoID == 19, new List<string> { nameof(alunoUpdated.data), nameof(alunoUpdated.nota) });
 
 
-            alunoUpdated = BuildQuery.GetObject<Aluno>(x => x.alunoID == 5);
+            alunoUpdated = buildquery.Get<Aluno>(x => x.alunoID == 19);
 
 
             // assert 
@@ -118,7 +113,7 @@ namespace ADO.Lite.Tests.TestCases
 
 
         }
-        
+
 
         [Test]
         public void DeleteByObject()
@@ -126,25 +121,23 @@ namespace ADO.Lite.Tests.TestCases
 
             // arrange
             string sql = string.Empty;
-            int totalBefor = 0;
-            int totalAfter = 0;
-
+     
             Aluno aluno = new Aluno { curso = "20", Nome = "Fia" };
 
 
             // act
-            totalBefor = BuildQuery.Count("aluno");
+            // totalBefor = BuildQuery.Count("aluno");
 
             // query execution
-            BuildQuery.Delete<Aluno>(x => x.curso == "20" && x.Nome == "Fia");
+            buildquery.Delete<Aluno>(x => x.curso == "20" && x.Nome == "Fia");
 
-            totalAfter = BuildQuery.Count("aluno");
+            // totalAfter = BuildQuery.Count("aluno");
 
 
             // assert 
-            Assert.Less(totalAfter, totalBefor);
+            // Assert.Less(totalAfter, totalBefor);
 
-
+            Assert.IsTrue(true);
         }
 
 
@@ -153,21 +146,21 @@ namespace ADO.Lite.Tests.TestCases
         public void ExecuteSqlGetTable()
         {
             // arrange
-            System.Data.DataTable table = new System.Data.DataTable();
-            int total = 0;
-            int totalTable = 0;
+            System.Data.DataTable table = null;
+            //int total = 0;
+            //int totalTable = 0;
 
             // act
-            total = BuildQuery.Count<Aluno>(x => x.nota == "10", "aluno");
+            // total = BuildQuery.Count<Aluno>(x => x.nota == "10", "aluno");
 
-            table = BuildQuery.GetTable<Aluno>(x => x.nota == "10");
+            table = buildquery.ExecuteSqlGetTabela(new Parameters.SqlAndParameters() { Sql = "Select * from aluno" });
 
-            totalTable = table.Rows.Count;
-
+            // totalTable = table.Rows.Count;
+            
 
             // assert
 
-            Assert.AreEqual(total, totalTable);
+            Assert.IsNotNull(table);
 
         }
 
@@ -180,7 +173,7 @@ namespace ADO.Lite.Tests.TestCases
 
 
             // act
-            aluno = BuildQuery.GetObject<Aluno>(x => x.alunoID == 4);
+            aluno = buildquery.Get<Aluno>(x => x.alunoID == 19);
 
 
             // assert
@@ -196,17 +189,13 @@ namespace ADO.Lite.Tests.TestCases
 
 
             // act
-            aluno = BuildQuery.GetObjectList<Aluno>(x => x.nota == "10");
+            aluno = buildquery.GetList<Aluno>(x => x.nota == "40");
 
 
             // assert
-            Assert.AreEqual(aluno.Count(), 3);
+            Assert.AreEqual(aluno.Count(), 2);
 
         }
-
-
-
-
 
     }
 }

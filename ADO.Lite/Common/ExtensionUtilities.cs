@@ -4,248 +4,351 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace ADO.Lite.Common
 {
     public static class ExtensionUtilities
     {
 
-        public static Dictionary<string, string> dbTypes = null;
-
-        public static Dictionary<string, string> GetdbTypes(this IDbCommand sqlCmd, string nomeTabela, DbProvider dbProvider = DbProvider.SqlClient)
+        public static void SetParameters(this IDbCommand command, SqlAndParameters sqlParameter)
         {
-
-            Dictionary<string, string> dictionaryDbTypes = new Dictionary<string, string>();
-            string sql = string.Empty;
-
-
-            try
-            {
-
-
-                if (dbProvider == DbProvider.SqlClient)
-                {
-
-                    sql = string.Format("SELECT DATA_TYPE,COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE  TABLE_NAME = '{0}' ", nomeTabela);
-
-                }
-                else if (dbProvider == DbProvider.DB2Client)
-                {
-                    sql = string.Format("SELECT COLTYPE DATA_TYPE, NAME COLUMN_NAME FROM SYSIBM.SYSCOLUMNS WHERE  TBNAME = '{0}' ", nomeTabela);
-
-                }
-                else if (dbProvider == DbProvider.MySqlClient)
-                {
-                    sql = string.Format("SELECT DATA_TYPE, COLUMN_NAME FROM SYSIBM.SYSCOLUMNS WHERE  TABLE_NAME = '{0}' ", nomeTabela);
-
-                }
-
-
-                sqlCmd.CommandText = sql;
-
-                //if (sqlCmd.Connection.)
-
-                using (var reader = sqlCmd.ExecuteReader())
-                {
-
-                    while (reader.Read())
-                    {
-
-                        dictionaryDbTypes.Add(reader["COLUMN_NAME"].ToString(), reader["DATA_TYPE"].ToString());
-
-                    }
-
-                }
-
-
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-
-            return dictionaryDbTypes;
-
-        }
-
-        public static string GetTableName(this string inSql)
-        {
-            return inSql.ToLower().Split(new string[] { "from", "into", "update" }, StringSplitOptions.None)[1].Trim().ToString().Split(' ')[0].ToString();
-
-        }
-
-        public static void SetParameters(this IDbCommand command, SqlParameter sqlParameter)
-        {
-
-            string tableName = sqlParameter.Sql.GetTableName();
-
-            // get db types
-            dbTypes = command.GetdbTypes(nomeTabela: tableName);
-
-
             // check befor use
             sqlParameter?.Parameter?.ForEach(keyValueParameter =>
             {
-
                 IDbDataParameter parameters = command.CreateParameter();
-                string dbDataType = dbTypes.FirstOrDefault(p => "@" + p.Key == keyValueParameter.Key).Value.Trim();
 
-                parameters.ParameterName = keyValueParameter.Key;
-                parameters.Value = keyValueParameter.Value;
+                parameters.ParameterName = keyValueParameter.ParameterKey;
+                parameters.Value = keyValueParameter.ParameterValue;
 
-
-
-                if (dbDataType == "date")
-                {
-                    parameters.DbType = DbType.Date;
-                    parameters.Value = DateTime.Parse(keyValueParameter.Value);
-                }
-                else if (dbDataType == "datetime")
-                {
-                    parameters.DbType = DbType.DateTime;
-                    parameters.Value = DateTime.Parse(keyValueParameter.Value);
-
-                }
-                else if (dbDataType == "int")
-                {
-                    parameters.DbType = DbType.Int32;
-                    parameters.Value = int.Parse(keyValueParameter.Value);
-
-                }
-                else if (dbDataType == "decimal")
-                {
-                    parameters.DbType = DbType.Decimal;
-                    parameters.Value = Decimal.Parse(keyValueParameter.Value);
-
-                }
-                else if (dbDataType == "Double")
-                {
-                    parameters.DbType = DbType.Double;
-                    parameters.Value = Double.Parse(keyValueParameter.Value);
-                }
-                else if (dbDataType.EndsWith("char"))
-                {
-
-                    parameters.DbType = DbType.String;
-                    parameters.Value = keyValueParameter.Value;
-
-                }
                 command.Parameters.Add(parameters);
+            });
+        }
 
+        public static void SetParameters<T>(this IDbCommand command, T dataValueObject, DbProvider DbProvider, string condition, List<string> excludeProperties = null, bool isStoredProcedure = false)
+        {
+            string TableName = dataValueObject.GetType().Name;
+            List<string> listColumn = new List<string>();
+            string UpdateSet = string.Empty;
 
+            UpdateSet = dataValueObject.GetParamTypeUpdateSet(DbProvider, excludeProperties);
+
+            // set sql
+            command.CommandText = $"update {TableName} set {UpdateSet} where {condition} ";
+
+            // set command type
+            command.CommandType = isStoredProcedure ? CommandType.StoredProcedure : CommandType.Text;
+
+            // get properties to save to db
+            listColumn = dataValueObject.GetParamListName(excludeProperties);
+
+            // set parameters
+            listColumn.ForEach(keyValueParameter =>
+            {
+                IDbDataParameter parameters = command.CreateParameter();
+
+                object ParameterValue = dataValueObject.GetType().GetProperty(keyValueParameter).GetValue(dataValueObject, null);
+
+                parameters.ParameterName = keyValueParameter.GetParamType(DbProvider);
+                parameters.Value = ParameterValue;
+
+                command.Parameters.Add(parameters);
+            });
+        }
+
+        private static string GetParamTypeUpdateSet<T>(this T dataValueObject, DbProvider DbProvider, List<string> excludeProperties = null)
+        {
+            string paramType = string.Empty;
+
+            List<string> listColumn = new List<string>();
+            List<string> listColumnout = new List<string>();
+
+            listColumn = dataValueObject.GetParamListName(excludeProperties);
+
+            listColumn.ForEach(ParamName =>
+            {
+                if (DbProvider == DbProvider.SqlClient || DbProvider == DbProvider.MySqlClient)
+                {
+                    paramType = "@" + ParamName;
+                }
+                else if (DbProvider == DbProvider.DB2Client)
+                {
+                    paramType = "?";
+                }
+
+                listColumnout.Add(ParamName + "=" + paramType);
             });
 
-
+            return string.Join(",", listColumnout);
         }
 
-
-        public static Dictionary<string, string> GetdbTypes(this IDbCommand sqlCmd)
+        public static void SetParameters<T>(this IDbCommand command, T dataValueObject, DbProvider DbProvider, List<string> excludeProperties = null, bool isStoredProcedure = false)
         {
+            string TableName = dataValueObject.GetType().Name;
+            string propertyFieldNames = string.Empty;
+            string paramsFieldKeys = string.Empty;
+            List<string> listColumn = new List<string>();
 
+            propertyFieldNames = dataValueObject.GetPropertyNames(excludeProperties);
+            paramsFieldKeys = dataValueObject.GetParamTypeString(DbProvider, excludeProperties);
 
-            try
+            // set sql
+            command.CommandText = $"insert into {TableName} ({propertyFieldNames}) values({paramsFieldKeys}) ";
+
+            // set command type
+            command.CommandType = isStoredProcedure ? CommandType.StoredProcedure : CommandType.Text;
+
+            // get properties to save to db
+            listColumn = dataValueObject.GetParamListName(excludeProperties);
+
+            // set parameters
+            listColumn.ForEach(keyValueParameter =>
             {
-                // get db types
-                return dbTypes;
+                IDbDataParameter parameters = command.CreateParameter();
 
-            }
-            catch (Exception)
+                object ParameterValue = dataValueObject.GetType().GetProperty(keyValueParameter).GetValue(dataValueObject, null);
+
+                parameters.ParameterName = keyValueParameter.GetParamType(DbProvider);
+                parameters.Value = ParameterValue;
+
+                command.Parameters.Add(parameters);
+            });
+        }
+
+        public static string GetStringFromExpression<T>(this Expression<Func<T, bool>> expression)
+        {
+            var replacements = new Dictionary<string, string>();
+            string bodyCondition = string.Empty;
+            WalkExpression(replacements, expression);
+
+            string body = expression.Body.ToString();
+
+            foreach (var parm in expression.Parameters)
             {
-
-                throw;
+                var parmName = parm.Name;
+                var parmTypeName = parm.Type.Name;
+                body = body.Replace(parmName + ".", parmTypeName + ".");
             }
 
+            foreach (var replacement in replacements)
+            {
+                body = body.Replace(replacement.Key, replacement.Value);
+            }
 
+            bodyCondition = ReplaceWithLike(body).Replace(typeof(T).Name + ".", "");
+
+            return bodyCondition;
         }
 
-        /// <summary>
-        /// Gets the property name list.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="inObject">The in object.</param>
-        /// <returns></returns>
-        public static List<string> GetPropertyNameList<T>(this T inObject)
+        private static string ReplaceWithLike(string sql)
         {
-            return inObject.GetType().GetProperties().Cast<System.Reflection.PropertyInfo>().Select(x => x.Name).ToList();
+            string sqlCondition = string.Empty;
+
+            sqlCondition = ReplaceContains(sql).ReplaceEndsWith().ReplaceStartsWith();
+
+            return sqlCondition;
         }
 
-        /// <summary>
-        /// Transform object proprietes to list
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="inObject">The in object.</param>
-        /// <returns></returns>
-        public static List<KeyValue> GetPropertyValueList<T>(this T inObject)
+        private static string ReplaceContains(string sql)
         {
-            List<KeyValue> _propertyValueList = new List<KeyValue>();
-            KeyValue _keyValue;
-            Type _delegateFuncType = typeof(Func<T, Object>);
-            //Func<T, Object> _getValor;
+            string sqlCondition = sql;
 
+            sqlCondition = sql.Replace("==", "=").
+                                Replace("AndAlso", " And ").
+                                Replace("OrElse", " or ").
+                                Replace(@"\", "").
+                                Replace(@"""", "'");
 
-            // get lists of properties
+            if (sqlCondition.Contains(".Contains") || sqlCondition.Contains(".EndsWith") || sqlCondition.Contains(".StartsWith"))
+            {
+                sqlCondition = sqlCondition.Replace(".Contains('", " like ('%");
 
-            inObject.GetType().GetProperties().ToList().
-                                            ForEach((_propertyInfo) =>
-                                            {
-                                                _keyValue = new KeyValue();
-                                                // Set func
-                                                //_getValor = (Func<T, Object>)Delegate.CreateDelegate(_delegateFuncType,null, _propertyInfo.GetGetMethod());
+                string[] Values = sqlCondition.Split(new char[] { '%', ')' });
 
-                                                _keyValue.Key = _propertyInfo.Name;
-                                                _keyValue.Value = Convert.ToString(_propertyInfo.GetValue(inObject, null));
-                                                //_keyValue.Value = (string)_getValor.Invoke(inObject);
+                var ValuesContain = Values.Where(x => string.IsNullOrEmpty(x) == false && x.Contains("like") == false && x.Contains("EndsWith") == false && x.Contains("StartsWith") == false).ToList();
 
-                                                //  set property and propertyValue
-                                                _propertyValueList.Add(_keyValue);
-
-                                            });
-
-
-            return _propertyValueList;
-
+                ValuesContain.ForEach((y) => { sqlCondition = sqlCondition.Replace(y, y.Replace("'", "") + "%'"); });
+            }
+            return sqlCondition;
         }
 
-
-
-        /// <summary>
-        /// Gets the property parameter list. Ex: a=@a
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="inObject">The in object.</param>
-        /// <returns></returns>
-        public static List<KeyValue> GetPropertyParamList<T>(this T inObject)
+        private static string ReplaceEndsWith(this string sqlCondition)
         {
-            List<KeyValue> _propertyValueList = new List<KeyValue>();
-            KeyValue _keyValue;
-            //Type _delegateFuncType = typeof(Func<T, Object>);
+            if (sqlCondition.Contains(".Contains") || sqlCondition.Contains(".EndsWith") || sqlCondition.Contains(".StartsWith"))
+            {
+                string[] Values = sqlCondition.Split(new char[] { '%', ')' });
 
+                var ValuesEndsWith = Values.Where(x => string.IsNullOrEmpty(x) == false && x.Contains("like") == false && x.Contains("EndsWith") == true).ToList();
 
-            // get lists of properties
+                ValuesEndsWith?.ForEach((y) =>
+                {
+                    var EndWithValues = y.Split(new string[] { ".EndsWith" }, StringSplitOptions.None);
 
-            inObject.GetType().GetProperties().ToList().
-                                            ForEach((_propertyInfo) =>
-                                            {
-                                                _keyValue = new KeyValue();
-                                                // Set func
-                                                //_getValor = (Func<T, Object>)Delegate.CreateDelegate(_delegateFuncType,null, _propertyInfo.GetGetMethod());
+                    sqlCondition = sqlCondition.Replace(y, EndWithValues[0] + " like ('" + EndWithValues[1].Replace("'", "").Replace("(", "") + "%'");
+                });
+            }
 
-                                                _keyValue.Key = _propertyInfo.Name;
-                                                _keyValue.Value = "@" + _propertyInfo.Name;
-
-                                                //  set property and propertyValue
-                                                _propertyValueList.Add(_keyValue);
-
-                                            });
-
-
-            return _propertyValueList;
-
+            return sqlCondition;
         }
 
+        private static string ReplaceStartsWith(this string sqlCondition)
+        {
+            if (sqlCondition.Contains(".Contains") || sqlCondition.Contains(".EndsWith") || sqlCondition.Contains(".StartsWith"))
+            {
+                sqlCondition = sqlCondition.Replace(".StartsWith('", " like ('%").Replace("(", "").Replace(")", "");
+            }
+
+            return sqlCondition;
+        }
+
+        private static void WalkExpression(Dictionary<string, string> replacements, Expression expression)
+        {
+            switch (expression.NodeType)
+            {
+                case ExpressionType.MemberAccess:
+                    string replacementExpression = expression.ToString();
+                    if (replacementExpression.Contains("value("))
+                    {
+                        string replacementValue = Expression.Lambda(expression).Compile().DynamicInvoke().ToString();
+                        if (!replacements.ContainsKey(replacementExpression))
+                        {
+                            replacements.Add(replacementExpression, replacementValue.ToString());
+                        }
+                    }
+                    break;
+
+                case ExpressionType.GreaterThan:
+                case ExpressionType.GreaterThanOrEqual:
+                case ExpressionType.LessThan:
+                case ExpressionType.LessThanOrEqual:
+                case ExpressionType.OrElse:
+                case ExpressionType.AndAlso:
+                case ExpressionType.Equal:
+                    var bexp = expression as BinaryExpression;
+                    WalkExpression(replacements, bexp.Left);
+                    WalkExpression(replacements, bexp.Right);
+                    break;
+
+                case ExpressionType.Call:
+                    var mcexp = expression as MethodCallExpression;
+                    foreach (var argument in mcexp.Arguments)
+                    {
+                        WalkExpression(replacements, argument);
+                    }
+                    break;
+
+                case ExpressionType.Lambda:
+                    var lexp = expression as LambdaExpression;
+                    WalkExpression(replacements, lexp.Body);
+                    break;
+
+                case ExpressionType.Constant:
+                    //do nothing
+                    break;
+
+                default:
+                    //Trace.WriteLine("Unknown type");
+                    break;
+            }
+        }
+
+        public static List<string> GetListStringFromExpression<T>(this Expression<Func<T, bool>> expression)
+        {
+            var replacements = new Dictionary<string, string>();
+            List<string> bodyCondition = new List<string>();
+            WalkExpression(replacements, expression);
+            List<string> propertyList = new List<string>();
+
+            string body = expression.Body.ToString();
+
+            propertyList = typeof(T).GetProperties().Select(x => x.Name).ToList();
+
+            propertyList.ForEach(p => { if (body.Contains(p)) bodyCondition.Add(p); });
 
 
+            return bodyCondition;
+        }
 
+        private static string GetParamType(this string ParamName, DbProvider DbProvider)
+        {
+            string paramType = string.Empty;
+
+            if (DbProvider == DbProvider.SqlClient || DbProvider == DbProvider.MySqlClient)
+            {
+                paramType = "@" + ParamName;
+            }
+            else if (DbProvider == DbProvider.DB2Client)
+            {
+                paramType = "?";
+            }
+
+            return paramType;
+        }
+
+        private static string GetParamTypeString<T>(this T dataValueObject, DbProvider DbProvider, List<string> excludeProperties = null)
+        {
+            string paramType = string.Empty;
+            List<string> listColumn = new List<string>();
+
+            listColumn = dataValueObject.GetParamListName(excludeProperties);
+
+            paramType = listColumn.GetParamTypeString(DbProvider);
+
+            return paramType;
+        }
+
+        private static string GetParamTypeString(this List<string> paramList, DbProvider DbProvider)
+        {
+            string paramName = string.Empty;
+            List<string> listColumnout = new List<string>();
+
+            paramList.ForEach(ParamName =>
+            {
+                if (DbProvider == DbProvider.SqlClient || DbProvider == DbProvider.MySqlClient)
+                {
+                    paramName = "@" + ParamName;
+                }
+                else if (DbProvider == DbProvider.DB2Client)
+                {
+                    paramName = "?";
+                }
+
+                listColumnout.Add(paramName);
+            });
+
+            return string.Join(",", listColumnout);
+        }
+
+        private static List<string> GetParamListName<T>(this T dataValueObject, List<string> excludeProperties = null)
+        {
+            List<string> listColumn = new List<string>();
+
+            if (excludeProperties != null)
+            {
+                listColumn = dataValueObject.GetType().GetProperties().Where(u => !excludeProperties.Exists(p => p.Equals(u.Name, StringComparison.OrdinalIgnoreCase))).Select(x => x.Name).ToList();
+            }
+            else
+            {
+                listColumn = dataValueObject.GetType().GetProperties().Select(x => x.Name).ToList();
+            }
+
+            return listColumn;
+        }
+
+        public static string GetPropertyNames<T>(this T dataObject, List<string> excludeProperties = null)
+        {
+            List<string> listColumn = new List<string>();
+
+            if (excludeProperties != null)
+            {
+                listColumn = dataObject.GetType().GetProperties().Where(u => !excludeProperties.Exists(p => p.Equals(u.Name, StringComparison.OrdinalIgnoreCase))).Select(x => "[" + x.Name + "]").ToList();
+            }
+            else
+            {
+                listColumn = dataObject.GetType().GetProperties().Select(x => "[" + x.Name + "]").ToList();
+            }
+
+            return string.Join(",", listColumn);
+        }
     }
 }

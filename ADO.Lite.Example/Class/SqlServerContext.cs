@@ -24,6 +24,8 @@ namespace ADO.Lite.Example.Class
 
         public IDbDataAdapter SetAdapter { get; set; }
 
+        public IDbTransaction DbTransaction { get; set; }
+
         public SqlServerContext()
         {
 

@@ -16,20 +16,12 @@ namespace ADO.Lite.Example.Class
         {
 
             // initialize connecton
-            BuildQuery.DbConnection = new SqlServerContext();
+           // BuildQuery.DbConnection = new SqlServerContext();
 
 
         }
 
-
-        public void CheckAny()
-        {
-
-            bool resultado = BuildQuery.CheckAny<Aluno>((x) => x.nota == "10" && x.alunoID == 4);
-
-
-        }
-
+        
 
 
     }

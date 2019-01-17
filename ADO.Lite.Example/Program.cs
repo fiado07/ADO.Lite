@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ADO.Lite;
 using ADO.Lite.Contracts;
-using System.Data.SqlClient;
-using System.Data;
 using ADO.Lite.SqlQuery;
 using ADO.Lite.Example.Class;
-using ADO.Lite.Enums;
+
 
 namespace ADO.Lite.Example
 {
@@ -19,65 +13,81 @@ namespace ADO.Lite.Example
         {
 
 
-            IDbConnectionSql sqlConnnection = new SqlServerContext();
-            BuildQuery.DbConnection = sqlConnnection;
+            //command.CommandText = "Select TLELEM, TLDESC from SIMCTLC.TBLLIN where TLCODE=640 "
+
+
+            IDbConnectionSql Db2Connnection = new Tests.Class.DB2Context();
+            // BuildQuery.DbConnection = Db2Connnection;
+            
+            BuildQuery buildquery = BuildQuery.ContextBuilder(Db2Connnection) ;
+                    
+            object result;
+
+            try
+            {
+
+                result = buildquery.Get<Matricula>(x => x.DMACCT == "250101620");
+                
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
 
 
 
-            // arrange
-            string sql = string.Empty;
-            int totalBefor = 0;
-            int totalAfter = 0;
-
-            Aluno aluno = new Aluno { curso = "20", Nome = "Fia" };
+            //IDbConnectionSql sqlConnnection = new SqlServerContext();
+            //BuildQuery.DbConnection = sqlConnnection;
 
 
-            // act
-            totalBefor = BuildQuery.Count("aluno");
 
-            // Insert query execution
-            BuildQuery.Insert(aluno, new List<string> { nameof(aluno.alunoID), nameof(aluno.data) });
+            //// arrange
+            //string sql = string.Empty;
+            //int totalBefor = 0;
+            //int totalAfter = 0;
 
-            totalAfter = BuildQuery.Count("aluno");
-
-
-            //Aluno aluno = new Aluno { alunoID = 4, nota = "10" };
-
-            bool resultado = BuildQuery.CheckAny<Aluno>((x) => x.nota == "10" && x.alunoID == 4);
+            //Aluno aluno = new Aluno { curso = "20", Nome = "Fia" };
 
 
-            Console.WriteLine(resultado);
+            //// act
+            //totalBefor = BuildQuery.Count("aluno");
+
+            //// Insert query execution
+            //BuildQuery.Insert(aluno, new List<string> { nameof(aluno.alunoID), nameof(aluno.data) });
+
+            //totalAfter = BuildQuery.Count("aluno");
+
+
+            ////Aluno aluno = new Aluno { alunoID = 4, nota = "10" };
+
+            //bool resultado = BuildQuery.CheckAny<Aluno>((x) => x.nota == "10" && x.alunoID == 4);
+
+
+            //Console.WriteLine(resultado);
             Console.Read();
 
 
         }
 
 
-        public static void InsertByObject()
+        public class Matricula
         {
 
-            // arrange
-            string sql = string.Empty;
-            int totalBefor = 0;
-            int totalAfter = 0;
+            public string DMACCT { get; set; }
+            public string DMBK { get; set; }
 
-            Aluno aluno = new Aluno { curso = "20", Nome = "Fia" };
+            public string DMTYP { get; set; }
 
+            public Matricula()
+            {
 
-            // act
-            totalBefor = BuildQuery.Count( "aluno");
+            }
 
-            // Insert query execution
-            BuildQuery.Insert(aluno, new List<string> { nameof(aluno.data) });
-
-            totalAfter = BuildQuery.Count( "aluno");
-
-
-            // assert 
-            //   Assert.Greater(totalAfter, totalBefor);
 
 
         }
+
 
     }
 }

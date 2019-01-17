@@ -101,12 +101,12 @@ namespace ADO.Lite.Common
                                                                                 SetMapedObject<TMapTo>(newObject, reader, dbtypes, propertInfo);
 
                                                                             });
-                //newObjectList.Add(newObject);
+               
                 yield return newObject;
 
             }
 
-            //return newObjectList;
+       
         }
 
         private void SetMapedObject<TMapTo>(TMapTo newObject, IDataReader reader, Dictionary<string, string> dbtypes, System.Reflection.PropertyInfo propertyInfo) where TMapTo : new()

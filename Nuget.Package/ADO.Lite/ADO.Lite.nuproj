@@ -19,7 +19,7 @@
   <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
   <PropertyGroup Label="Configuration">
     <Id>ADO.Lite</Id>
-    <Version>1.1.0</Version>
+    <Version>2.0.0</Version>
     <Title>ADO.Lite</Title>
     <Authors>Fiado Baloi</Authors>
     <Owners>Fiado Baloi</Owners>
@@ -32,6 +32,7 @@
     <Copyright>Copyright © Fiado Baloi</Copyright>
     <Tags>orm sql micro-orm</Tags>
     <GenerateSymbolPackage>false</GenerateSymbolPackage>
+    <DevelopmentDependency>false</DevelopmentDependency>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Readme.txt" />

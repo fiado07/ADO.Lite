@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 
 namespace ADO.Lite.Contracts
@@ -14,7 +15,7 @@ namespace ADO.Lite.Contracts
         /// </summary>
         /// <param name="sqlParameter">The SQL parameter.</param>
         /// <param name="dbConnection">The database connection.</param>
-        void ExecuteSql(Parameters.SqlParameter sqlParameter, IDbConnectionSql dbConnection);
+        void ExecuteSql(Parameters.SqlAndParameters sqlParameter);
 
         /// <summary>
         /// Executes the SQL get object.
@@ -23,7 +24,7 @@ namespace ADO.Lite.Contracts
         /// <param name="sqlParameter">The SQL parameter.</param>
         /// <param name="dbConnection">The database connection.</param>
         /// <returns></returns>
-        T ExecuteSqlGetObject<T>(Parameters.SqlParameter sqlParameter, IDbConnectionSql dbConnection) where T : new();
+        T ExecuteSqlGetObject<T>(Parameters.SqlAndParameters sqlParameter) where T : new();
 
 
         /// <summary>
@@ -32,7 +33,7 @@ namespace ADO.Lite.Contracts
         /// <param name="sqlParameter">The SQL parameter.</param>
         /// <param name="dbConnection">The database connection.</param>
         /// <returns></returns>
-        bool any(Parameters.SqlParameter sqlParameter, IDbConnectionSql dbConnection);
+        bool any(Parameters.SqlAndParameters sqlParameter);
 
 
         /// <summary>
@@ -42,7 +43,7 @@ namespace ADO.Lite.Contracts
         /// <param name="sqlParameter">The SQL parameter.</param>
         /// <param name="dbConnection">The database connection.</param>
         /// <returns></returns>
-        IEnumerable<T> ExecuteSqlGetObjectList<T>(Parameters.SqlParameter sqlParameter, IDbConnectionSql dbConnection) where T : new();
+        IEnumerable<T> ExecuteSqlGetObjectList<T>(Parameters.SqlAndParameters sqlParameter) where T : new();
 
 
         /// <summary>
@@ -51,10 +52,26 @@ namespace ADO.Lite.Contracts
         /// <param name="sqlParameter">The SQL parameter.</param>
         /// <param name="dbConnection">The database connection.</param>
         /// <returns></returns>
-        System.Data.DataTable ExecuteSqlGetTabela(Parameters.SqlParameter sqlParameter, IDbConnectionSql dbConnection);
+        System.Data.DataTable ExecuteSqlGetTabela(Parameters.SqlAndParameters sqlParameter);
 
 
-        int ExecuteSqlGetSingle(Parameters.SqlParameter sqlParameter, IDbConnectionSql dbConnection);
+        object ExecuteSqlGetSingle(Parameters.SqlAndParameters sqlParameter);
+
+        
+        void Add<T>(T dataObject, List<string> excludeProperties = null, bool isStoredProcedure = false);
+
+        void Update<T>(T dataObject, string predicate, List<string> excludeProperties = null, bool isStoredProcedure = false);
+
+        void Delete<T>(System.Linq.Expressions.Expression<Func<T, bool>> predicate) where T : class, new();
+
+        void Update<T>(T dataObject, System.Linq.Expressions.Expression<Func<T, bool>> predicate, List<string> excludeProperties = null, bool isStoredProcedure = false);
+        
+        T Get<T>(System.Linq.Expressions.Expression<Func<T, bool>> predicate) where T : class, new();
+
+        IEnumerable<T> GetList<T>(System.Linq.Expressions.Expression<Func<T, bool>> predicate) where T : class, new();
+
+        bool any<T>(System.Linq.Expressions.Expression<Func<T, bool>> predicate) where T : class, new();
+
 
 
     }

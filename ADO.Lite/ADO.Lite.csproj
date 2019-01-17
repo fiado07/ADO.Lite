@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Mappers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Work\packages\Mappers.1.6.0\lib\net40\Mappers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -45,21 +49,21 @@
     <Compile Include="Common\DBConnection.cs" />
     <Compile Include="Common\ExceptionMessage.cs" />
     <Compile Include="Common\ExtensionUtilities.cs" />
-    <Compile Include="Common\KeyValue.cs" />
+    <Compile Include="Common\Parameter.cs" />
     <Compile Include="Common\Maper.cs" />
     <Compile Include="Contracts\IDbConnectionSql.cs" />
     <Compile Include="Contracts\IDbExecute.cs" />
     <Compile Include="Contracts\IMaper.cs" />
     <Compile Include="Enums\DbProvider.cs" />
     <Compile Include="Exceptions\ExceptionBuilder.cs" />
-    <Compile Include="Expressions\SqlExpressionBuilder.cs" />
-    <Compile Include="Expressions\SqlPredicateBuilder.cs" />
-    <Compile Include="Parameters\SqlParameter.cs" />
+    <Compile Include="Parameters\SqlAndParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\DbExecuteQuery.cs" />
     <Compile Include="SqlQuery\BuildQuery.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

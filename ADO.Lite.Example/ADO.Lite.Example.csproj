@@ -53,6 +53,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ADO.Lite.Tests\ADO.Lite.Tests.csproj">
+      <Project>{8EDF4429-251A-416D-BB68-93F227191BCF}</Project>
+      <Name>ADO.Lite.Tests</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ADO.Lite\ADO.Lite.csproj">
       <Project>{bec4af8b-f276-4735-b8cb-3bd019b3f94a}</Project>
       <Name>ADO.Lite</Name>

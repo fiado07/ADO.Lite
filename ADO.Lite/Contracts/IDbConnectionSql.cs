@@ -16,6 +16,8 @@ namespace ADO.Lite.Contracts
 
         IDbConnection DbConnectionBase { get; set; }
 
+        IDbTransaction DbTransaction { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether this instance can close.
         /// </summary>
@@ -30,13 +32,7 @@ namespace ADO.Lite.Contracts
         /// <value>
         /// The set adapter.
         /// </value>
-        System.Data.IDbDataAdapter SetAdapter { get; set; }
-
-
-        // Expression<Func<T, Boolean>> BuildPredicate<T>(Expression<Func<T, Boolean>> predicate);
-
-
-        IEnumerable<string> columnsToFilter { get; set; }
+        IDbDataAdapter SetAdapter { get; set; }
 
 
         /// <summary>

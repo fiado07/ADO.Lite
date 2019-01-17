@@ -1,7 +1,5 @@
 ﻿
 using ADO.Lite.Contracts;
-using ADO.Lite.Enums;
-using ADO.Lite.Expressions;
 using ADO.Lite.Parameters;
 using ADO.Lite.Repository;
 using System;
@@ -15,320 +13,92 @@ namespace ADO.Lite.SqlQuery
     /// <summary>
     /// Main Entrance class to build queries
     /// </summary>
-    public static class BuildQuery
+    public class BuildQuery : IDbExecute
     {
-        public static IDbConnectionSql DbConnection { set; get; }
+        //IDbConnectionSql DbConnection { set; get; }
 
-        private static DbExecuteQuery dbExecuteQuery { set; get; }
+        private static DbExecuteQuery DbExecuteQuery { set; get; }
 
 
-        public static void InitializeBuildQuery()
+        private BuildQuery()
         {
-
-            dbExecuteQuery = new DbExecuteQuery();
-
-            if (DbConnection == null)
-                throw new Exception("DbConnection is not Initialized.");
-
-            if (DbConnection.DbConnectionBase.State == ConnectionState.Closed)
-                DbConnection.DbConnectionBase.Open();
-
-
-        }
-
-        public static bool CheckAny<T>(this Expression<Func<T, Boolean>> predicate, string nomeTabela = "")
-        {
-
-            bool _result = false;
-            SqlParameter sqlAndParameter = new SqlParameter();
-            //Expression<Func<T, Boolean>> predicate;
-
-
-            // check initializers
-            InitializeBuildQuery();
-
-
-            // get parameters
-            sqlAndParameter = SqlExpressionBuilder.sqlBuildSelect(predicate, nomeTabela);
-
-
-            // shearch for result
-            _result = dbExecuteQuery.any(sqlAndParameter, DbConnection);
-
-            return _result;
 
         }
 
 
-        public static int Count<T>(this Expression<Func<T, Boolean>> predicate, string nomeTabela = "")
+        public static BuildQuery ContextBuilder(IDbConnectionSql dbConnection)
         {
 
-            int _result = 0;
-            SqlParameter sqlAndParameter = new SqlParameter();
-
-
-            // check initializers
-            InitializeBuildQuery();
-
-
-            // get parameters
-            sqlAndParameter = SqlExpressionBuilder.sqlBuildSelectCount(predicate, nomeTabela);
-
-
-            // shearch for result
-            _result = dbExecuteQuery.ExecuteSqlGetSingle(sqlAndParameter, DbConnection);
-
-            return _result;
+            DbExecuteQuery = new DbExecuteQuery(dbConnection);
+            
+            return new SqlQuery.BuildQuery(); 
 
         }
 
 
-        public static int Count(string nomeTabela = "")
+        public void Add<T>(T dataObject, List<string> excludeProperties = null, bool isStoredProcedure = false)
         {
-
-            int _result = 0;
-            SqlParameter sqlAndParameter = new SqlParameter();
-
-
-            // check initializers
-            InitializeBuildQuery();
-
-
-            // get parameters
-            sqlAndParameter = SqlExpressionBuilder.sqlBuildSelectCountAll(nomeTabela);
-
-
-            // shearch for result
-            _result = dbExecuteQuery.ExecuteSqlGetSingle(sqlAndParameter, DbConnection);
-
-            return _result;
-
+            DbExecuteQuery.Add(dataObject, excludeProperties, isStoredProcedure);
         }
 
-
-        public static void ExecuteSql(this string sql)
+        public bool any(SqlAndParameters sqlParameter)
         {
-
-            try
-            {
-
-                // initializers
-                InitializeBuildQuery();
-
-                // execute
-                dbExecuteQuery.ExecuteSql(new SqlParameter { Sql = sql }, DbConnection);
-
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
+            return DbExecuteQuery.any(sqlParameter);
         }
 
-
-        public static DataTable GetTable<T>(this Expression<Func<T, Boolean>> predicate, string nomeTabela = "")
+        public bool any<T>(Expression<Func<T, bool>> predicate) where T : class, new()
         {
-
-            DataTable tabela = new DataTable();
-            SqlParameter sqlParameter = null;
-
-            try
-            {
-
-                // initializers
-                InitializeBuildQuery();
-
-
-                // get params
-                sqlParameter = SqlExpressionBuilder.sqlBuildSelect(predicate, nomeTabela);
-
-
-                // execute
-                tabela = dbExecuteQuery.ExecuteSqlGetTabela(sqlParameter, DbConnection);
-
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-
-            return tabela;
-
+            return DbExecuteQuery.any(predicate);
         }
 
-        public static T GetObject<T>(this Expression<Func<T, Boolean>> predicate, string nomeTabela = "") where T : new()
+        public void Delete<T>(Expression<Func<T, bool>> predicate) where T : class, new()
         {
-
-            DataTable _tabela = new DataTable();
-            T _entity = new T();
-            SqlParameter sqlParameter = null;
-
-            try
-            {
-
-                // initializers
-                InitializeBuildQuery();
-
-
-                // get params
-                sqlParameter = SqlExpressionBuilder.sqlBuildSelect(predicate, nomeTabela);
-
-
-                // execute
-                _entity = dbExecuteQuery.ExecuteSqlGetObject<T>(sqlParameter, DbConnection);
-
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-
-            return _entity;
-
+            DbExecuteQuery.Delete(predicate);
         }
 
-        public static string ExecuteSqlGetSingle(this SqlParameter sqlParameter)
+        public void ExecuteSql(SqlAndParameters sqlParameter)
         {
-
-            string result = string.Empty;
-            string filterField = sqlParameter.Sql.ToLower().Split(new string[] { "select" }, StringSplitOptions.None)[0];
-
-            try
-            {
-
-
-                // initializers
-                InitializeBuildQuery();
-
-
-                // execute
-                result = dbExecuteQuery.ExecuteSqlGetTabela(sqlParameter, DbConnection).Rows[0][filterField].ToString();
-
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-
-            return result;
-
+            DbExecuteQuery.ExecuteSql(sqlParameter);
         }
 
-        public static IEnumerable<T> GetObjectList<T>(this Expression<Func<T, Boolean>> predicate, string nomeTabela = "") where T : new()
+        public T ExecuteSqlGetObject<T>(SqlAndParameters sqlParameter) where T : new()
         {
-
-            IEnumerable<T> listObject = new List<T>();
-            SqlParameter sqlParameter = null;
-
-            try
-            {
-
-
-                // initializers
-                InitializeBuildQuery();
-
-
-                // get params
-                sqlParameter = SqlExpressionBuilder.sqlBuildSelect(predicate, nomeTabela);
-
-
-                // execute
-                listObject = dbExecuteQuery.ExecuteSqlGetObjectList<T>(sqlParameter, DbConnection);
-
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-
-            return listObject;
-
+            return DbExecuteQuery.ExecuteSqlGetObject<T>(sqlParameter);
         }
 
-
-        public static void Insert<T>(T newObject, List<string> excludeColumns = null, string nomeTabela = "")
+        public IEnumerable<T> ExecuteSqlGetObjectList<T>(SqlAndParameters sqlParameter) where T : new()
         {
-
-            SqlParameter sqlParameter = new SqlParameter();
-
-            try
-            {
-
-
-                // get parameters
-                sqlParameter = SqlExpressionBuilder.sqlBuildInsert(newObject, nomeTabela, excludeColumns);
-
-
-                // execute
-                dbExecuteQuery.ExecuteSql(sqlParameter, DbConnection);
-
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-
-
+            return DbExecuteQuery.ExecuteSqlGetObjectList<T>(sqlParameter);
         }
 
-
-        public static void Update<T>(T newObject, Expression<Func<T, Boolean>> predicate, string nomeTabela = "", List<string> excludeColumns = null) where T : new()
+        public object ExecuteSqlGetSingle(SqlAndParameters sqlParameter)
         {
-
-            SqlParameter sqlParameter = new SqlParameter();
-
-
-            try
-            {
-
-                // get parameters
-                sqlParameter = SqlExpressionBuilder.sqlBuildUpdate(newObject, predicate, nomeTabela, excludeColumns);
-
-
-                if (string.IsNullOrEmpty(sqlParameter.Sql)) throw new Exception("Nenhum dado foi modifiado.");
-
-                // execute
-                dbExecuteQuery.ExecuteSql(sqlParameter, DbConnection);
-
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-
+            return DbExecuteQuery.ExecuteSqlGetSingle(sqlParameter);
         }
-        
 
-        public static void Delete<T>(this Expression<Func<T, Boolean>> predicate, string nomeTabela = "")
+        public DataTable ExecuteSqlGetTabela(SqlAndParameters sqlParameter)
         {
-            SqlParameter sqlParameter = new SqlParameter();
-
-            try
-            {
-
-                // get parameters
-                sqlParameter = SqlExpressionBuilder.sqlBuidDelete(predicate, nomeTabela);
-
-
-                // execute
-                dbExecuteQuery.ExecuteSql(sqlParameter, DbConnection);
-
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
+            return DbExecuteQuery.ExecuteSqlGetTabela(sqlParameter);
         }
-        
-        
+
+        public T Get<T>(Expression<Func<T, bool>> predicate) where T : class, new()
+        {
+            return DbExecuteQuery.Get(predicate);
+        }
+
+        public IEnumerable<T> GetList<T>(Expression<Func<T, bool>> predicate) where T : class, new()
+        {
+            return DbExecuteQuery.GetList(predicate);
+        }
+
+        public void Update<T>(T dataObject, string predicate, List<string> excludeProperties = null, bool isStoredProcedure = false)
+        {
+            DbExecuteQuery.Update(dataObject, predicate, excludeProperties, isStoredProcedure);
+        }
+
+        public void Update<T>(T dataObject, Expression<Func<T, bool>> predicate, List<string> excludeProperties = null, bool isStoredProcedure = false)
+        {
+            DbExecuteQuery.Update(dataObject, predicate, excludeProperties, isStoredProcedure);
+        }
     }
 }
