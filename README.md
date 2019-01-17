@@ -89,7 +89,7 @@ This is strongly typed function that takes lambda expression predicate as argume
 This function only execute a plane query to database. 
 
 ```csharp
-buildquery.ExecuteSql(sql);
+buildquery.ExecuteSql(new Parameters.SqlAndParameters() { Sql = "Select * from aluno");
 ```
 
 
